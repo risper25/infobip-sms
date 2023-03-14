@@ -21,6 +21,11 @@ public class SmsController {
     public void sendSMS(@RequestBody SmsRequest smsRequest) throws IOException {
         smsService.sendSMS(smsRequest.getSender(),smsRequest.getRecipient(),smsRequest.getMessageText());
     }
-
+    @PostMapping("/delivery-reports")
+    public void receiveDeliveryReports(HttpServletRequest request) throws IOException {
+        SmsDeliveryResult reports = new JSON().deserialize(request.getInputStream(), SmsDeliveryResult.class);
+        for (SmsReport report : reports.getResults()) {
+            System.out.println(report.getMessageId() + " - " + report.getStatus().getName());
+        }
     }
-
+}
